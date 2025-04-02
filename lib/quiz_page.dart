@@ -154,10 +154,8 @@ class QuizPageState extends State<QuizPage> {
 
                                   if (_answerWasSelected) {
                                     if (index == _quizManager.correctAnswerIndex) {
-                                      backgroundColor = Colors.green;
                                       borderColor = Colors.green[800];
                                     } else if (index == _quizManager.selectedAnswerIndex) {
-                                      backgroundColor = Colors.red;
                                       borderColor = Colors.red[800];
                                     }
                                   }
