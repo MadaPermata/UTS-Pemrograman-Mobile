@@ -1,212 +1,230 @@
 import 'package:flutter/material.dart';
-import 'quiz_page.dart';
-import 'package:confetti/confetti.dart';
-import 'dart:math';
+import 'quiz_page.dart'; // Import halaman kuis
+import 'package:confetti/confetti.dart'; // Import pustaka confetti
 
 class ResultPage extends StatefulWidget {
-  final int score;
-  final VoidCallback resetQuiz;
+  // Widget halaman hasil kuis
+  final int score; // Skor pengguna
+  final int totalQuestions; // Jumlah total pertanyaan
+  final VoidCallback resetQuiz; // Fungsi untuk mereset kuis
 
-  const ResultPage({super.key, required this.score, required this.resetQuiz});
+  const ResultPage({
+    super.key,
+    required this.score,
+    required this.totalQuestions,
+    required this.resetQuiz,
+  });
 
   @override
   ResultPageStateClass createState() => ResultPageStateClass();
 }
 
 class ResultPageStateClass extends State<ResultPage> {
-  late ConfettiController _controllerCenter;
+  // State untuk halaman hasil kuis
+  late ConfettiController _controllerCenter; // Controller confetti
+  late double _scorePercentage; // Persentase skor
 
   @override
   void initState() {
+    // Metode inisialisasi state
     super.initState();
-    _controllerCenter = ConfettiController(duration: const Duration(seconds: 10));
-    _playConfetti();
+    _scorePercentage = widget.totalQuestions > 0
+        ? (widget.score / widget.totalQuestions)
+        : 0; // Menghitung persentase skor
+    _controllerCenter =
+        ConfettiController(duration: const Duration(seconds: 3)); // Membuat controller confetti
+    _playConfetti(); // Memainkan confetti jika skor cukup tinggi
   }
 
   @override
   void dispose() {
-    _controllerCenter.dispose();
+    // Metode dispose untuk membersihkan resource
+    _controllerCenter.dispose(); // Membuang controller confetti
     super.dispose();
   }
 
   void _playConfetti() {
-    if (widget.score == 10) {
-      _controllerCenter.play();
-    } else if (widget.score >= 7) {
-      _controllerCenter.play();
-    } else if (widget.score >= 5) {
-      // Tidak ada animasi untuk skor 5-6
-    } else {
-      // Tidak ada animasi untuk skor 0-4
+    // Metode untuk memainkan confetti
+    if (_scorePercentage >= 0.5) {
+      _controllerCenter.play(); // Memainkan confetti jika persentase skor >= 0.5
     }
   }
 
-  String getResultMessage(int score) {
-    if (score == 10) {
-      return 'Sempurna! Anda ahli dalam D4 Manajemen Informatika!';
-    } else if (score >= 7) {
-      return 'Bagus! Anda memiliki pengetahuan yang baik!';
-    } else if (score >= 5) {
-      return 'Lumayan! Anda perlu belajar lebih banyak.';
-    } else {
-      return 'Maaf, Anda perlu belajar lebih banyak.';
-    }
+  String getResultMessage() {
+    // Metode untuk mendapatkan pesan hasil berdasarkan persentase skor
+    if (_scorePercentage == 1) return 'Sempurna! Kamu menguasai materi ini!';
+    if (_scorePercentage >= 0.8) return 'Luar Biasa! Pengetahuanmu sangat baik!';
+    if (_scorePercentage >= 0.6) return 'Bagus! Sedikit lagi menuju sempurna!';
+    if (_scorePercentage >= 0.4) return 'Lumayan. Terus belajar, ya!';
+    return 'Jangan menyerah! Coba lagi dan tingkatkan skormu!';
   }
 
-  IconData getResultIcon(int score) {
-    if (score == 10) {
-      return Icons.star;
-    } else if (score >= 7) {
-      return Icons.thumb_up;
-    } else if (score >= 5) {
-      return Icons.lightbulb_outline;
-    } else {
-      return Icons.sentiment_dissatisfied;
-    }
+  IconData getResultIcon() {
+    // Metode untuk mendapatkan ikon hasil berdasarkan persentase skor
+    if (_scorePercentage == 1) return Icons.emoji_events;
+    if (_scorePercentage >= 0.8) return Icons.star;
+    if (_scorePercentage >= 0.6) return Icons.thumb_up_alt;
+    if (_scorePercentage >= 0.4) return Icons.sentiment_satisfied_alt;
+    return Icons.sentiment_very_dissatisfied;
   }
 
-  Color getResultColor(int score) {
-    if (score == 10) {
-      return Colors.greenAccent;
-    } else if (score >= 7) {
-      return Colors.blueAccent;
-    } else if (score >= 5) {
-      return Colors.orangeAccent;
-    } else {
-      return Colors.redAccent;
-    }
+  Color getResultColor() {
+    // Metode untuk mendapatkan warna hasil berdasarkan persentase skor
+    if (_scorePercentage == 1) return Colors.amber.shade600;
+    if (_scorePercentage >= 0.8) return Colors.lightGreenAccent.shade400;
+    if (_scorePercentage >= 0.6) return Colors.blueAccent.shade200;
+    if (_scorePercentage >= 0.4) return Colors.orangeAccent.shade400;
+    return Colors.redAccent.shade400;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.topCenter,
-      children: [
-        Container(
-          width: double.infinity,
-          color: Colors.transparent,
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'Hasil Quiz',
-                    style: TextStyle(
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      SizedBox(
-                        width: 150,
-                        height: 150,
-                        child: CircularProgressIndicator(
-                          value: widget.score / 10,
-                          strokeWidth: 10,
-                          valueColor: AlwaysStoppedAnimation<Color>(getResultColor(widget.score)),
-                          backgroundColor: Colors.white30,
-                        ),
-                      ),
-                      Icon(
-                        getResultIcon(widget.score),
-                        size: 80,
-                        color: getResultColor(widget.score),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 30),
-                  Text(
-                    getResultMessage(widget.score),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 22,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    'Skor Anda: ${widget.score}/10',
-                    style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-                  ElevatedButton(
-                    onPressed: () {
-                      widget.resetQuiz();
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => const QuizPage()),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.blue.shade700,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
-                    child: const Text(
-                      'Ulangi Quiz',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+    // Metode build
+    Color resultColor = getResultColor(); // Mendapatkan warna hasil
+
+    return Scaffold(
+      body: Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          Container(
+            // Background gradien
+            width: double.infinity,
+            height: double.infinity,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFF3B4CCA),
+                  Color(0xFF201B81),
+                  Color(0xFF13104E),
+                  Color(0xFF0D0B35),
+                  Color(0xFF0A0828),
+                  Color(0xFF07061B),
                 ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
             ),
           ),
-        ),
-        if (widget.score == 10) // Kondisi untuk skor sempurna
-          ConfettiWidget(
-            confettiController: _controllerCenter,
-            blastDirection: pi / 2,
-            emissionFrequency: 0.01, // Frekuensi emisi lebih tinggi
-            numberOfParticles: 100, // Jumlah partikel lebih banyak
-            gravity: 0.1,
-            minBlastForce: 50, // Kekuatan ledakan minimal
-            maxBlastForce: 100, // Kekuatan ledakan maksimal
-            colors: const [
-              Colors.yellow,
-              Colors.amber,
-              Colors.orange,
-              Colors.red,
-            ],
-            particleDrag: 0.05, // Efek drag partikel
-            shouldLoop: false, // Animasi tidak berulang
-            blastDirectionality: BlastDirectionality.explosive, // Arah ledakan menyebar
-            createParticlePath: (size) {
-              return Path()
-                ..addOval(Rect.fromCircle(center: Offset.zero, radius: size.width / 2)); // Bentuk partikel
-            },
-          )
-        else
-          ConfettiWidget(
-            confettiController: _controllerCenter,
-            blastDirection: pi / 2,
-            emissionFrequency: 0.05,
-            numberOfParticles: 50,
-            gravity: 0.1,
-            colors: const [
-              Colors.green,
-              Colors.blue,
-              Colors.pink,
-              Colors.orange,
-              Colors.purple
-            ],
+          SafeArea(
+            child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(30.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Hasil Quiz',
+                      style: TextStyle(
+                        fontSize: 34,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 35),
+                    SizedBox(
+                      width: 160,
+                      height: 160,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          SizedBox(
+                            width: 160,
+                            height: 160,
+                            child: CircularProgressIndicator(
+                              value: _scorePercentage,
+                              strokeWidth: 12,
+                              valueColor:
+                              AlwaysStoppedAnimation<Color>(resultColor),
+                              backgroundColor: Colors.white.withOpacity(0.2),
+                            ),
+                          ),
+                          Icon(getResultIcon(), size: 70, color: resultColor),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    Text(
+                      getResultMessage(),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          fontSize: 20, color: Colors.white, height: 1.4),
+                    ),
+                    const SizedBox(height: 15),
+                    Text(
+                      'Skor: ${widget.score}/${widget.totalQuestions}',
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 45),
+                    ElevatedButton.icon(
+                      icon: const Icon(Icons.refresh),
+                      label: const Text('Ulangi Quiz'),
+                      onPressed: () {
+                        widget.resetQuiz(); // Mereset kuis
+                        Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                              const QuizPage(), // Navigasi ke halaman kuis
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) =>
+                                  FadeTransition(
+                                      opacity: animation, child: child),
+                              transitionDuration:
+                              const Duration(milliseconds: 400),
+                            ));
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 40, vertical: 15),
+                        backgroundColor: Colors.white,
+                        foregroundColor: const Color(0xFF13104E),
+                        textStyle: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30)),
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.maybePop(context); // Navigasi kembali
+                        },
+                        child: const Text("Keluar",
+                            style: TextStyle(color: Colors.white70)))
+                  ],
+                ),
+              ),
+            ),
           ),
-      ],
+          Align(
+            // Confetti
+            alignment: Alignment.topCenter,
+            child: ConfettiWidget(
+              confettiController: _controllerCenter,
+              blastDirectionality: BlastDirectionality.explosive,
+              shouldLoop: false,
+              numberOfParticles: 30,
+              emissionFrequency: 0.05,
+              minBlastForce: 5,
+              maxBlastForce: 20,
+              gravity: 0.2,
+              colors: const [
+                Colors.greenAccent,
+                Colors.blueAccent,
+                Colors.pinkAccent,
+                Colors.orangeAccent,
+                Colors.purpleAccent,
+                Colors.yellowAccent
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
