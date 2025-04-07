@@ -4,18 +4,21 @@ import 'quiz_manager.dart';
 import 'result_page.dart';
 
 class QuizPage extends StatefulWidget {
-  // Widget halaman kuis
+  // Widget halaman Quiz
   const QuizPage({super.key});
 
   @override
   QuizPageState createState() => QuizPageState();
 }
 
-class QuizPageState extends State<QuizPage> with SingleTickerProviderStateMixin {
+class QuizPageState extends State<QuizPage>
+    with SingleTickerProviderStateMixin {
   // State untuk halaman kuis dengan SingleTickerProviderStateMixin untuk animasi
 
-  final QuizManager _quizManager = QuizManager(); // Objek QuizManager untuk mengelola logika kuis
-  bool _answerWasSelected = false; // Flag untuk menandai apakah jawaban sudah dipilih
+  final QuizManager _quizManager =
+      QuizManager(); // Objek QuizManager untuk mengelola logika kuis
+  bool _answerWasSelected =
+      false; // Flag untuk menandai apakah jawaban sudah dipilih
   double _progress = 0.0; // Progres kuis
 
   Timer? _questionTimer; // Timer untuk menghitung waktu pertanyaan
@@ -41,21 +44,25 @@ class QuizPageState extends State<QuizPage> with SingleTickerProviderStateMixin 
     _showPlusOne = false; // Mengatur flag animasi skor ke false
     _updateProgress(); // Memperbarui progres kuis
 
-    _remainingTime = _quizManager.questionDuration.inSeconds; // Mengatur sisa waktu pertanyaan
+    _remainingTime = _quizManager
+        .questionDuration.inSeconds; // Mengatur sisa waktu pertanyaan
     _startQuestionTimer(); // Memulai timer pertanyaan
 
     _scoreAnimationController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
     ); // Menginisialisasi controller animasi skor
-    _scoreOffsetAnimation = Tween<Offset>(
-        begin: const Offset(0, 0.5), end: const Offset(0, -1.5))
-        .animate(CurvedAnimation(
-        parent: _scoreAnimationController, curve: Curves.easeOutCubic)); // Menginisialisasi animasi offset skor
+    _scoreOffsetAnimation =
+        Tween<Offset>(begin: const Offset(0, 0.5), end: const Offset(0, -1.5))
+            .animate(CurvedAnimation(
+                parent: _scoreAnimationController,
+                curve: Curves
+                    .easeOutCubic)); // Menginisialisasi animasi offset skor
     _scoreFadeAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(
         CurvedAnimation(
             parent: _scoreAnimationController,
-            curve: const Interval(0.4, 1.0, curve: Curves.easeOut))); // Menginisialisasi animasi fade skor
+            curve: const Interval(0.4, 1.0,
+                curve: Curves.easeOut))); // Menginisialisasi animasi fade skor
   }
 
   @override
@@ -81,7 +88,8 @@ class QuizPageState extends State<QuizPage> with SingleTickerProviderStateMixin 
   void _startQuestionTimer() {
     // Metode untuk memulai timer pertanyaan
     _questionTimer?.cancel(); // Membatalkan timer sebelumnya
-    _remainingTime = _quizManager.questionDuration.inSeconds; // Mengatur sisa waktu
+    _remainingTime =
+        _quizManager.questionDuration.inSeconds; // Mengatur sisa waktu
     if (mounted) {
       setState(() {});
     }
@@ -225,10 +233,8 @@ class QuizPageState extends State<QuizPage> with SingleTickerProviderStateMixin 
                         ),
                       ),
                       backgroundColor: _remainingTime <= 5
-                          ? Colors.amber.shade300
-                          .withOpacity(0.85)
-                          : Colors.black.withOpacity(
-                          0.25),
+                          ? Colors.amber.shade300.withOpacity(0.85)
+                          : Colors.black.withOpacity(0.25),
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 0),
                       visualDensity: VisualDensity.compact,
@@ -266,7 +272,8 @@ class QuizPageState extends State<QuizPage> with SingleTickerProviderStateMixin 
                     children: [
                       if (!_quizManager.isFinished)
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
                           child: Stack(
                             alignment: Alignment.center,
                             children: [
@@ -283,13 +290,17 @@ class QuizPageState extends State<QuizPage> with SingleTickerProviderStateMixin 
                                 child: LayoutBuilder(
                                   builder: (context, constraints) {
                                     return AnimatedContainer(
-                                      duration: const Duration(milliseconds: 500),
+                                      duration:
+                                          const Duration(milliseconds: 500),
                                       width: constraints.maxWidth * _progress,
                                       height: 12,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         gradient: const LinearGradient(
-                                          colors: [Colors.greenAccent, Colors.blueAccent],
+                                          colors: [
+                                            Colors.greenAccent,
+                                            Colors.blueAccent
+                                          ],
                                         ),
                                       ),
                                     );
@@ -305,7 +316,7 @@ class QuizPageState extends State<QuizPage> with SingleTickerProviderStateMixin 
                           child: Text(
                             "Soal ${_quizManager.questionIndex + 1} dari ${_quizManager.totalQuestions}",
                             style:
-                            TextStyle(color: Colors.white70, fontSize: 14),
+                                TextStyle(color: Colors.white70, fontSize: 14),
                           ),
                         ),
                       Expanded(
@@ -314,9 +325,11 @@ class QuizPageState extends State<QuizPage> with SingleTickerProviderStateMixin 
                           child: Column(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 60),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 60),
                                 child: Text(
-                                  _quizManager.currentQuestion['question'] as String,
+                                  _quizManager.currentQuestion['question']
+                                      as String,
                                   style: const TextStyle(
                                     fontSize: 25,
                                     fontWeight: FontWeight.bold,
@@ -330,24 +343,19 @@ class QuizPageState extends State<QuizPage> with SingleTickerProviderStateMixin 
                                 child: ListView.builder(
                                   padding: EdgeInsets.zero,
                                   itemCount: (_quizManager
-                                      .currentQuestion['answers']
-                                  as List)
+                                          .currentQuestion['answers'] as List)
                                       .length,
                                   itemBuilder: (context, index) {
-                                    Map<String,
-                                        Object> answer = (_quizManager
-                                        .currentQuestion['answers']
-                                    as List<
-                                        Map<String, Object>>)[index];
-                                    Color defaultButtonColor =
-                                    index % 2 == 0
+                                    Map<String, Object> answer = (_quizManager
+                                            .currentQuestion['answers']
+                                        as List<Map<String, Object>>)[index];
+                                    Color defaultButtonColor = index % 2 == 0
                                         ? const Color(0xFF283593)
                                         : const Color(0xFF1E88E5);
                                     Color defaultTextColor = Colors.white;
                                     Color currentBackgroundColor =
                                         defaultButtonColor;
-                                    Color currentTextColor =
-                                        defaultTextColor;
+                                    Color currentTextColor = defaultTextColor;
                                     IconData? leadingIcon;
                                     double elevation = 3;
                                     int? correctIndex =
@@ -355,8 +363,7 @@ class QuizPageState extends State<QuizPage> with SingleTickerProviderStateMixin 
                                     int? selectedIndex =
                                         _quizManager.selectedAnswerIndex;
                                     if (_answerWasSelected) {
-                                      bool isCorrect =
-                                          answer['score'] == 1;
+                                      bool isCorrect = answer['score'] == 1;
                                       if (isCorrect) {
                                         currentBackgroundColor =
                                             Colors.green.shade700;
@@ -379,62 +386,55 @@ class QuizPageState extends State<QuizPage> with SingleTickerProviderStateMixin 
                                       }
                                     }
                                     return Container(
-                                      margin: const EdgeInsets.only(
-                                          bottom: 12),
+                                      margin: const EdgeInsets.only(bottom: 12),
                                       child: ElevatedButton(
                                         onPressed: _answerWasSelected
                                             ? null
                                             : () {
-                                          _questionTimer?.cancel();
-                                          int correctAnswerIdx =
-                                          (_quizManager.currentQuestion[
-                                          'answers']
-                                          as List<
-                                              Map<String,
-                                                  Object>>)
-                                              .indexWhere((a) =>
-                                          a['score'] ==
-                                              1);
-                                          int scoreGained =
-                                          answer['score']
-                                          as int;
-                                          bool isCorrect =
-                                              scoreGained > 0;
-                                          setState(() {
-                                            _quizManager
-                                                .answerQuestion(
-                                                scoreGained,
-                                                index,
-                                                correctAnswerIdx);
-                                            _answerWasSelected =
-                                            true;
-                                          });
-                                          if (isCorrect) {
-                                            _showPointsAnimation(
-                                                scoreGained);
-                                          }
-                                          _moveToNextQuestionAfterDelay();
-                                        },
+                                                _questionTimer?.cancel();
+                                                int correctAnswerIdx =
+                                                    (_quizManager.currentQuestion[
+                                                                'answers']
+                                                            as List<
+                                                                Map<String,
+                                                                    Object>>)
+                                                        .indexWhere((a) =>
+                                                            a['score'] == 1);
+                                                int scoreGained =
+                                                    answer['score'] as int;
+                                                bool isCorrect =
+                                                    scoreGained > 0;
+                                                setState(() {
+                                                  _quizManager.answerQuestion(
+                                                      scoreGained,
+                                                      index,
+                                                      correctAnswerIdx);
+                                                  _answerWasSelected = true;
+                                                });
+                                                if (isCorrect) {
+                                                  _showPointsAnimation(
+                                                      scoreGained);
+                                                }
+                                                _moveToNextQuestionAfterDelay();
+                                              },
                                         style: ElevatedButton.styleFrom(
-                                          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 45),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 15, vertical: 45),
                                           backgroundColor:
-                                          currentBackgroundColor,
-                                          foregroundColor:
-                                          currentTextColor,
+                                              currentBackgroundColor,
+                                          foregroundColor: currentTextColor,
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
-                                              BorderRadius.circular(
-                                                  12)),
+                                                  BorderRadius.circular(12)),
                                           elevation: elevation,
                                           disabledBackgroundColor:
-                                          currentBackgroundColor,
+                                              currentBackgroundColor,
                                           disabledForegroundColor:
-                                          currentTextColor,
+                                              currentTextColor,
                                         ).copyWith(
-                                          overlayColor:
-                                          WidgetStateProperty
+                                          overlayColor: WidgetStateProperty
                                               .resolveWith<Color?>(
-                                                (Set<WidgetState> states) {
+                                            (Set<WidgetState> states) {
                                               if (states.contains(
                                                   WidgetState.pressed)) {
                                                 return Colors.white
@@ -446,28 +446,26 @@ class QuizPageState extends State<QuizPage> with SingleTickerProviderStateMixin 
                                         ),
                                         child: Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                              MainAxisAlignment.center,
                                           children: [
                                             if (leadingIcon != null &&
                                                 _answerWasSelected)
                                               Padding(
                                                   padding:
-                                                  const EdgeInsets
-                                                      .only(
-                                                      right: 10.0),
+                                                      const EdgeInsets.only(
+                                                          right: 10.0),
                                                   child: Icon(leadingIcon,
                                                       size: 20))
                                             else if (_answerWasSelected)
                                               const SizedBox(width: 30),
                                             Expanded(
                                                 child: Text(
-                                                  answer['text'] as String,
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                      FontWeight.w500),
-                                                )),
+                                              answer['text'] as String,
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w500),
+                                            )),
                                             if (leadingIcon != null &&
                                                 _answerWasSelected)
                                               const SizedBox(width: 30)
