@@ -42,13 +42,16 @@ class WelcomePage extends StatelessWidget {
                     padding: const EdgeInsets.all(20.0),
                     child: Column(
                       // Column untuk menyusun widget secara vertikal
-                      mainAxisAlignment: MainAxisAlignment.center, // Memusatkan widget secara vertikal
+                      mainAxisAlignment: MainAxisAlignment
+                          .center, // Memusatkan widget secara vertikal
                       children: [
                         Image.asset(
                           // Widget untuk menampilkan gambar logo
                           'images/mi.png',
-                          width: constraints.maxWidth * 0.5, // Lebar gambar 50% dari lebar layar
-                          height: constraints.maxWidth * 0.5, // Tinggi gambar 50% dari lebar layar
+                          width: constraints.maxWidth *
+                              0.5, // Lebar gambar 50% dari lebar layar
+                          height: constraints.maxWidth *
+                              0.5, // Tinggi gambar 50% dari lebar layar
                         ),
                         const SizedBox(height: 20), // Spasi vertikal
                         const Text(
@@ -65,7 +68,7 @@ class WelcomePage extends StatelessWidget {
                         const Text(
                           // Teks deskripsi quiz
                           'Uji pengetahuanmu tentang D4 Manajemen Informatika dengan quiz seru ini!',
-                          textAlign: TextAlign.center, // Teks rata tengah
+                          textAlign: TextAlign.center, // Teks center
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.white70,
@@ -78,12 +81,14 @@ class WelcomePage extends StatelessWidget {
                             // Navigasi ke halaman quiz_page.dart
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const QuizPage()),
+                              MaterialPageRoute(
+                                  builder: (context) => const QuizPage()),
                             );
                           },
                           style: ElevatedButton.styleFrom(
                             // Gaya tombol
-                            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 40, vertical: 15),
                             textStyle: const TextStyle(fontSize: 18),
                             backgroundColor: Colors.white,
                             foregroundColor: Colors.blue.shade700,
