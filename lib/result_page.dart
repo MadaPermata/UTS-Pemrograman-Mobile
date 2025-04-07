@@ -31,8 +31,8 @@ class ResultPageStateClass extends State<ResultPage> {
     _scorePercentage = widget.totalQuestions > 0
         ? (widget.score / widget.totalQuestions)
         : 0; // Menghitung persentase skor
-    _controllerCenter =
-        ConfettiController(duration: const Duration(seconds: 3)); // Membuat controller confetti
+    _controllerCenter = ConfettiController(
+        duration: const Duration(seconds: 3)); // Membuat controller confetti
     _playConfetti(); // Memainkan confetti jika skor cukup tinggi
   }
 
@@ -46,14 +46,16 @@ class ResultPageStateClass extends State<ResultPage> {
   void _playConfetti() {
     // Metode untuk memainkan confetti
     if (_scorePercentage >= 0.5) {
-      _controllerCenter.play(); // Memainkan confetti jika persentase skor >= 0.5
+      _controllerCenter
+          .play(); // Memainkan confetti jika persentase skor >= 0,5
     }
   }
 
   String getResultMessage() {
     // Metode untuk mendapatkan pesan hasil berdasarkan persentase skor
     if (_scorePercentage == 1) return 'Sempurna! Kamu menguasai materi ini!';
-    if (_scorePercentage >= 0.8) return 'Luar Biasa! Pengetahuanmu sangat baik!';
+    if (_scorePercentage >= 0.8)
+      return 'Luar Biasa! Pengetahuanmu sangat baik!';
     if (_scorePercentage >= 0.6) return 'Bagus! Sedikit lagi menuju sempurna!';
     if (_scorePercentage >= 0.4) return 'Lumayan. Terus belajar, ya!';
     return 'Jangan menyerah! Coba lagi dan tingkatkan skormu!';
@@ -134,7 +136,7 @@ class ResultPageStateClass extends State<ResultPage> {
                               value: _scorePercentage,
                               strokeWidth: 12,
                               valueColor:
-                              AlwaysStoppedAnimation<Color>(resultColor),
+                                  AlwaysStoppedAnimation<Color>(resultColor),
                               backgroundColor: Colors.white.withOpacity(0.2),
                             ),
                           ),
@@ -167,15 +169,15 @@ class ResultPageStateClass extends State<ResultPage> {
                         Navigator.pushReplacement(
                             context,
                             PageRouteBuilder(
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) =>
-                              const QuizPage(), // Navigasi ke halaman kuis
+                              pageBuilder: (context, animation,
+                                      secondaryAnimation) =>
+                                  const QuizPage(), // Navigasi ke halaman kuis
                               transitionsBuilder: (context, animation,
-                                  secondaryAnimation, child) =>
+                                      secondaryAnimation, child) =>
                                   FadeTransition(
                                       opacity: animation, child: child),
                               transitionDuration:
-                              const Duration(milliseconds: 400),
+                                  const Duration(milliseconds: 400),
                             ));
                       },
                       style: ElevatedButton.styleFrom(
