@@ -1,14 +1,15 @@
 import 'dart:math'; // Import pustaka math untuk fungsi random
 
 class QuizManager {
-  // Kelas untuk mengelola logika kuis
+  // Kelas untuk mengelola logika Quiz
 
   int _currentQuestionIndex = 0; // Indeks pertanyaan saat ini
   int _score = 0; // Skor pengguna
   int? _selectedAnswerIndex; // Indeks jawaban yang dipilih pengguna
   int? _correctAnswerIndex; // Indeks jawaban yang benar
 
-  final Duration questionDuration = const Duration(seconds: 20); // Durasi waktu untuk setiap pertanyaan
+  final Duration questionDuration =
+      const Duration(seconds: 20); // Durasi waktu untuk setiap pertanyaan
 
   final List<Map<String, Object>> _originalQuestions = [
     // Daftar pertanyaan
@@ -23,7 +24,7 @@ class QuizManager {
     },
     {
       'question':
-      'D4 Manajemen Informatika merupakan bagian dari Fakultas apa?',
+          'D4 Manajemen Informatika merupakan bagian dari Fakultas apa?',
       'answers': [
         {'text': 'FMIPA', 'score': 0},
         {'text': 'FEB', 'score': 0},
@@ -42,7 +43,7 @@ class QuizManager {
     },
     {
       'question':
-      'Apa gelar yang di dapatkan Lulusan D4 Manajemen Informatika UNESA?',
+          'Apa gelar yang di dapatkan Lulusan D4 Manajemen Informatika UNESA?',
       'answers': [
         {'text': 'S.Kom', 'score': 0},
         {'text': 'S.T', 'score': 0},
@@ -61,7 +62,7 @@ class QuizManager {
     },
     {
       'question':
-      'Di gedung K berapa letak Lab Komputer D4 Manajemen Informatika?',
+          'Di gedung K berapa letak Lab Komputer D4 Manajemen Informatika?',
       'answers': [
         {'text': 'K2', 'score': 0},
         {'text': 'K3', 'score': 0},
@@ -89,7 +90,7 @@ class QuizManager {
     },
     {
       'question':
-      'Framework apa yang digunakan untuk mobile development dengan Flutter?',
+          'Framework apa yang digunakan untuk mobile development dengan Flutter?',
       'answers': [
         {'text': 'React Native', 'score': 0},
         {'text': 'Ionic', 'score': 0},
@@ -108,7 +109,8 @@ class QuizManager {
     },
   ];
 
-  late List<Map<String, Object>> _questions; // Daftar pertanyaan yang akan ditampilkan (diacak)
+  late List<Map<String, Object>>
+      _questions; // Daftar pertanyaan yang akan ditampilkan (diacak)
 
   QuizManager() {
     // Konstruktor QuizManager
@@ -120,27 +122,38 @@ class QuizManager {
     if (_currentQuestionIndex < _questions.length) {
       return _questions[_currentQuestionIndex];
     } else {
-      return {'question': 'Quiz Selesai', 'answers': []}; // Mengembalikan pesan selesai jika semua pertanyaan sudah dijawab
+      return {
+        'question': 'Quiz Selesai',
+        'answers': []
+      }; // Mengembalikan pesan selesai jika semua pertanyaan sudah dijawab
     }
   }
 
-  int get totalQuestions => _questions.length; // Getter untuk mendapatkan jumlah total pertanyaan
+  int get totalQuestions =>
+      _questions.length; // Getter untuk mendapatkan jumlah total pertanyaan
   int get score => _score; // Getter untuk mendapatkan skor pengguna
-  int get questionIndex => _currentQuestionIndex; // Getter untuk mendapatkan indeks pertanyaan saat ini
-  bool get isFinished => _currentQuestionIndex >= _questions.length; // Getter untuk memeriksa apakah kuis sudah selesai
-  int? get selectedAnswerIndex => _selectedAnswerIndex; // Getter untuk mendapatkan indeks jawaban yang dipilih
-  int? get correctAnswerIndex => _correctAnswerIndex; // Getter untuk mendapatkan indeks jawaban yang benar
+  int get questionIndex =>
+      _currentQuestionIndex; // Getter untuk mendapatkan indeks pertanyaan saat ini
+  bool get isFinished =>
+      _currentQuestionIndex >=
+      _questions.length; // Getter untuk memeriksa apakah kuis sudah selesai
+  int? get selectedAnswerIndex =>
+      _selectedAnswerIndex; // Getter untuk mendapatkan indeks jawaban yang dipilih
+  int? get correctAnswerIndex =>
+      _correctAnswerIndex; // Getter untuk mendapatkan indeks jawaban yang benar
 
   void answerQuestion(int score, int selectedIndex, int correctIndex) {
     // Metode untuk menangani jawaban pengguna
     _score += score; // Menambahkan skor
-    _selectedAnswerIndex = selectedIndex; // Menyimpan indeks jawaban yang dipilih
+    _selectedAnswerIndex =
+        selectedIndex; // Menyimpan indeks jawaban yang dipilih
     _correctAnswerIndex = correctIndex; // Menyimpan indeks jawaban yang benar
   }
 
   void resetQuiz() {
     // Metode untuk mengatur ulang kuis
-    _questions = List.from(_originalQuestions); // Membuat salinan daftar pertanyaan asli
+    _questions =
+        List.from(_originalQuestions); // Membuat salinan daftar pertanyaan asli
     _questions.shuffle(Random()); // Mengacak urutan pertanyaan
     _currentQuestionIndex = 0; // Mengatur indeks pertanyaan ke 0
     _score = 0; // Mengatur skor ke 0
@@ -152,7 +165,8 @@ class QuizManager {
     // Metode untuk beralih ke pertanyaan berikutnya
     if (_currentQuestionIndex < _questions.length) {
       _currentQuestionIndex++; // Menaikkan indeks pertanyaan
-      _selectedAnswerIndex = null; // Mengatur indeks jawaban yang dipilih ke null
+      _selectedAnswerIndex =
+          null; // Mengatur indeks jawaban yang dipilih ke null
       _correctAnswerIndex = null; // Mengatur indeks jawaban yang benar ke null
     }
   }
