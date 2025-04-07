@@ -14,7 +14,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // Metode build yang membangun tampilan aplikasi
     return MaterialApp(
-      debugShowCheckedModeBanner: false, // Menonaktifkan banner debug
       title: 'Quiz Mahasiswa Baru', // Judul aplikasi
       theme: ThemeData(
         // Tema aplikasi
